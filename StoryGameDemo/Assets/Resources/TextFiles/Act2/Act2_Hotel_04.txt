@@ -1,13 +1,13 @@
 // https://jsonformatter.curiousconcept.com/ // JSON checker for syntax
 // https://www.codeandweb.com/blog/2014/03/28/using-spritesheets-with-unity // texture packer pro
 
-// DO IT QUICK AND PAINLESS
+// DO IT QUICK AND PAINLESS OR GET SOME FOOD AND GO
 {
   "dialogues": [
 	{
 	  "lyricString": "You make a dash for the buffet. You're loud... but your stomach is louder... almost there... almost.... there! What do you want to take??",	  
-	  "delayToMainBranch": 0,
-	  "branchNumber": 5
+	  "targetBranchNum": 4,
+	  "possibleAnswersNum": 5
 	}
   ]
 }

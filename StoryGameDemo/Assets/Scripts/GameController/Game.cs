@@ -44,6 +44,12 @@ public class Game : MonoBehaviour
     /** See CanProceedFeedback script*/
     public static Action<bool> OnProceedChanged;
 
+    [SerializeField]
+    private int targetBranchNumber = 1;
+
+    [SerializeField]
+    private int eventTarget = 0;
+
     private void Awake()
     {
         rpgText = GameObject.Find("RPG_Message").GetComponent<Text>();
@@ -56,6 +62,8 @@ public class Game : MonoBehaviour
     {
         currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(FileContainer.ActTwo_01);
         rpgText.text = currentEvent.dialogues[currentStepIndex++].lyricString;
+        Debug.Log("Count" + currentEvent.dialogues.Count + " stepindex " + currentStepIndex);
+        eventTarget = currentEvent.dialogues[currentStepIndex - 1].targetBranchNum;
         //if(currentEvent.dialogues.Count <= 1)
         //{
         //    bCanProceed = false;
@@ -69,6 +77,8 @@ public class Game : MonoBehaviour
     public Text curBranchIndex;
     public Text curBranchTotal;
     public Text curData;
+    public Text target;
+    public Text eventTargetText;
 
     void DebugHelper()
     {
@@ -80,7 +90,8 @@ public class Game : MonoBehaviour
         curBranchIndex.text = "Branch Index: " + currentBranch.branchIndex;
         curBranchTotal.text = "Branch Total: " + currentBranch.maxBranches;
         curData.text = "NarrativeData: " + currentBranch.narrativeData.Count;
-
+        target.text = "Target Branch: " + targetBranchNumber;
+        eventTargetText.text = "EV_Target: " + eventTarget;
     }
 
     private void Update()
@@ -148,7 +159,7 @@ public class Game : MonoBehaviour
 
     void SpawnAnswerButton(int index, string buttonText)
     {
-        Debug.Log("SpawnButton");
+        //Debug.Log("SpawnButton");
         GameObject button = (GameObject)Instantiate(Resources.Load("Prefabs/AnswerButton"));
         button.transform.SetParent(parentForAnswers);
         ButtonAnswer script = button.GetComponent<ButtonAnswer>() ? button.GetComponent<ButtonAnswer>() : button.AddComponent<ButtonAnswer>();
@@ -173,37 +184,25 @@ public class Game : MonoBehaviour
         // Get Act - I.E Act 2
         Act currentAct = Acts.instance.GetCurrentAct();
         // Get Number of Branches
-        int curBranch = currentAct.GetBranchCount();
+        int prevBranchIndex = currentAct.GetBranchCount();
         // Get the data at that branch
-        Branch currentBranch = currentAct.GetBranches()[curBranch];
+        Branch previousBranch = currentAct.GetBranches()[prevBranchIndex];
         // Get the max options for this branch
-        int numOfAnswers = currentBranch.maxBranches;
+        int numOfAnswers = previousBranch.maxBranches;
         // Based on the index of the answer button
         // Select the right narrative to branch to
 
-        int offset = currentEvent.dialogues[currentStepIndex - 1].delayToMainBranch;
-
-        string filePath = currentBranch.narrativeData[index + offset].filePath;
+        string filePath = previousBranch.narrativeData[index].filePath;
 
         // Reset to start of new event
         currentStepIndex = 0;
 
-        // Increment Branch Count for Current Act
+        // Linear Progression on main branch - This will be auto adjusted if a side branch is taken
         currentAct.IncrementBranchCount();
+        targetBranchNumber++;
 
         // Need a way to track the branching - Above might do it
         currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(filePath);
-
-        // Basically, if there is branching narrative, that eventually goes back to "main branch"
-        // being the branch that ultimately progresses through the story
-        // Find out how many side narratives there are until you meet up
-        int delayToMainBranch = currentEvent.dialogues[currentStepIndex].delayToMainBranch;
-
-        // Rewind to main branch, then proceed
-        //currentAct.IncrementBranchCount();
-        currentAct.DecrementBranchCount(delayToMainBranch);
-        
-        
 
         // Enable clicking
         SetCanProceed(true);
@@ -215,62 +214,56 @@ public class Game : MonoBehaviour
 
     public void ProceedThroughDialogueEvent()
     {
+
         if (!bCanProceed)
         {
-            Debug.Log("bCanProceed == false");
+            //Debug.Log("bCanProceed == false");
             return;
         }
+        // Cache current act
+        Act currentAct = Acts.instance.GetCurrentAct();
         if (currentStepIndex >= currentEvent.dialogues.Count)
         {
+            // Need a constraint here, if there are no more narrative entries for this act
+
             // Reached end of current branch
-            // Get option count
-            int numberOfPotentialAnswers = currentEvent.dialogues[currentStepIndex - 1].branchNumber;
-            Debug.Log("Step INdex: " + (currentStepIndex - 1).ToString());
+            // Spawn Answer buttons
+            int numberOfPotentialAnswers = currentEvent.dialogues[currentStepIndex - 1].possibleAnswersNum;
             string buttonText = "";
+            int curBranch = currentAct.GetBranchCount();
+            // Cache current branch
+            Branch currentBranch = currentAct.GetBranches()[curBranch];
             for (int i = 0; i < numberOfPotentialAnswers; i++)
             {
-                // Get Act - I.E Act 2
-                Act currentAct = Acts.instance.GetCurrentAct();
-                // Get Number of Branches
-                int curBranch = currentAct.GetBranchCount();
-                Debug.Log("Branch Count: " + curBranch);
-                // Get the data at that branch
-                Branch currentBranch = currentAct.GetBranches()[curBranch];
-                // Get the data for the button
-                Debug.Log("Data" + currentBranch.narrativeData[i].answerData);
-                int offset = currentEvent.dialogues[currentStepIndex - 1].delayToMainBranch;
-
-                buttonText = currentBranch.narrativeData[i + offset].answerData;
-                // Pass it all through to the button
+                // Extract button data from current branch config
+                if(i >= currentBranch.narrativeData.Count)
+                {
+                    
+                    Debug.Log("No More Narrative Data At Branch: " + curBranch);
+                    return;
+                }
+                buttonText = currentBranch.narrativeData[i].answerData;
                 SpawnAnswerButton(i, buttonText); 
             }
             SetCanProceed(false);
-            Debug.Log("Index Out of Bounds");
             return;
         }
         ScrollUp();
 
         rpgText.text = currentEvent.dialogues[currentStepIndex].lyricString;
+        eventTarget = currentEvent.dialogues[currentStepIndex].targetBranchNum;
 
-        //switch (currentEvent.dialogues[currentStepIndex].branchNumber)
-        //{
-        //    // Reset step index.
-        //    // Load Branching Narrative
-        //    // Assign new Text
-
-        //    // Continue current branch
-        //    case 0:
-        //        rpgText.text = currentEvent.dialogues[currentStepIndex].lyricString;
-        //        Debug.Log("Case 0 Activated");
-        //        break;
-        //    // Load new branch
-        //    case 1:
-        //        break;
-        //    case 2:
-        //        break;
-        //    default:
-        //        break;
-        //}
+        // Okay... this is to make sure, you return to the main branch
+        // Assuming a tangent was undergone
+        int difference = eventTarget - targetBranchNumber;
+        if (difference > 0)
+        {
+            targetBranchNumber += difference;
+            for (int i = 0; i < difference; i++)
+            {
+                currentAct.IncrementBranchCount();
+            }
+        }
         bCanProceed = false;
         IncrementStepIndex();
     }

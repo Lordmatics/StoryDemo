@@ -6,8 +6,8 @@
   "dialogues": [
     {
       "lyricString": "It looks like the hotel restaurant is open for breakfast!! You should check out the menu.",
-	  "delayToMainBranch": 0,
-	  "branchNumber": 1
+	  "targetBranchNum": 1,
+	  "possibleAnswersNum": 1
     }
   ]
 }

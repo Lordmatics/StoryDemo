@@ -25,7 +25,7 @@ public class ButtonAnswer : MonoBehaviour , IPointerDownHandler
         script.BranchNarrative(optionIndex);
         // Remove all buttons, including this one
         script.DestroyButtons();
-        Debug.Log("PointerDown");
+        //Debug.Log("PointerDown");
     }
 
     public void SetOptionIndex(int index)

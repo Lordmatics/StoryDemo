@@ -17,7 +17,7 @@ public class TextBoxPressed : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("OnPointerDown");
+        //Debug.Log("OnPointerDown");
         script.ProceedThroughDialogueEvent();
     }
 }

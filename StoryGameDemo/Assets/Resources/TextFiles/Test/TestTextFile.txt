@@ -5,13 +5,13 @@
   "dialogues": [
     {
       "lyricString": "Hello World",
-	  "delayToMainBranch": 0,
-	  "branchNumber": 0
+	  "targetBranchNum": 0,
+	  "possibleAnswersNum": 0
     },
 	{
 	  "lyricString": "This is a test",	  
-	  "delayToMainBranch": 0,
-	  "branchNumber": 0
+	  "targetBranchNum": 0,
+	  "possibleAnswersNum": 0
 	}
   ]
 }

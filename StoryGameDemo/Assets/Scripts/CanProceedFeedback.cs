@@ -35,7 +35,7 @@ public class CanProceedFeedback : MonoBehaviour
     void SetIcon(bool enabled)
     {
         icon.enabled = enabled;
-        Debug.Log("Icon Enabled : " + enabled);
+        //Debug.Log("Icon Enabled : " + enabled);
     }
     #endregion
 }

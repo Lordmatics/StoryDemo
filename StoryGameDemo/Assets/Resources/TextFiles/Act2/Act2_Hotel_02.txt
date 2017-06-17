@@ -6,18 +6,18 @@
   "dialogues": [
 	{
 	  "lyricString": "Menu added to inventory",	 
-	  "delayToMainBranch": 0,
-	  "branchNumber": 0
+	  "targetBranchNum": 2,
+	  "possibleAnswersNum": 0
 	},
 	{
 	  "lyricString": "Woah! These prices are ridiculous! What is this, a hotel for millionaires?",	  
-	  "delayToMainBranch": 0,
-	  "branchNumber": 0
+	  "targetBranchNum": 2,
+	  "possibleAnswersNum": 0
 	},
 	{
 	  "lyricString": "There's an open buffet table across the room... you need to grab some food here - you can barely stand.",
-	  "delayToMainBranch": 0,
-	  "branchNumber": 2
+	  "targetBranchNum": 2,
+	  "possibleAnswersNum": 2
 	}
   ]
 }
