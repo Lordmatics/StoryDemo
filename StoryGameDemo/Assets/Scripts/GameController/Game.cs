@@ -64,10 +64,30 @@ public class Game : MonoBehaviour
         //}
     }
 
+    public Text curActText;
+    public Text curBranchNum;
+    public Text curBranchIndex;
+    public Text curBranchTotal;
+    public Text curData;
+
+    void DebugHelper()
+    {
+        Act currentAct = Acts.instance.GetCurrentAct();
+        Branch currentBranch = currentAct.GetBranches()[currentAct.GetBranchCount()];
+
+        curActText.text = "Act Name: " + currentAct.GetClassName();
+        curBranchNum.text = "Branch Count: " + currentAct.GetBranchCount().ToString();
+        curBranchIndex.text = "Branch Index: " + currentBranch.branchIndex;
+        curBranchTotal.text = "Branch Total: " + currentBranch.maxBranches;
+        curData.text = "NarrativeData: " + currentBranch.narrativeData.Count;
+
+    }
+
     private void Update()
     {
+        DebugHelper();
         if (previousMessages.Count <= 0) return;
-        if(Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow))
         {
             // Move Scroll down
             //parentForScroll.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top)
@@ -76,8 +96,8 @@ public class Game : MonoBehaviour
             leftBot.y -= 400.0f * Time.deltaTime;
             rightTop.y -= 400.0f * Time.deltaTime;
             Debug.Log(leftBot.y + ": LeftbotY" + " And " + rightTop.y + " : RightTopY");
-            
-            if(previousMessages.Count < 3)
+
+            if (previousMessages.Count < 3)
             {
                 leftBot.y = Mathf.Clamp(leftBot.y, 0.0f, 620.0f);
                 rightTop.y = Mathf.Clamp(rightTop.y, 0.0f, 270.0f);
@@ -87,12 +107,12 @@ public class Game : MonoBehaviour
                 // This algorthm took forever to calculate xD
                 leftBot.y = Mathf.Clamp(leftBot.y, -1 * (((previousMessages.Count - 2) * 330.0f) - 270.0f), 0.0f);
                 rightTop.y = Mathf.Clamp(rightTop.y, -1 * (((previousMessages.Count - 2) * 330.0f) - 270.0f), 0.0f);
-            }     
+            }
 
             parentForScroll.offsetMin = leftBot;
             parentForScroll.offsetMax = rightTop;
         }
-        if(Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
             Vector2 leftBot = parentForScroll.offsetMin;
             Vector2 rightTop = parentForScroll.offsetMax;
@@ -119,18 +139,14 @@ public class Game : MonoBehaviour
     void IncrementStepIndex()
     {
         currentStepIndex++;
-        if(currentStepIndex >= currentEvent.dialogues.Count)
+        if (currentStepIndex >= currentEvent.dialogues.Count)
         {
-            if(OnProceedChanged != null)
-            {
-                bCanProceed = false;
-                OnProceedChanged(bCanProceed);
-            }
+            SetCanProceed(false);
         }
     }
     #endregion
 
-    void SpawnAnswerButton(int index)
+    void SpawnAnswerButton(int index, string buttonText)
     {
         Debug.Log("SpawnButton");
         GameObject button = (GameObject)Instantiate(Resources.Load("Prefabs/AnswerButton"));
@@ -138,23 +154,62 @@ public class Game : MonoBehaviour
         ButtonAnswer script = button.GetComponent<ButtonAnswer>() ? button.GetComponent<ButtonAnswer>() : button.AddComponent<ButtonAnswer>();
         script.SetOptionIndex(index);
         buttonList.Add(button);
+        Text textButton = button.GetComponentInChildren<Text>();
+        textButton.text = buttonText.ToString();
     }
 
     public void DestroyButtons()
     {
-        foreach(GameObject obj in buttonList)
+        foreach (GameObject obj in buttonList)
         {
             Destroy(obj);
         }
         buttonList.Clear();
     }
 
+    // Answer Button index
     public void BranchNarrative(int index)
     {
+        // Get Act - I.E Act 2
+        Act currentAct = Acts.instance.GetCurrentAct();
+        // Get Number of Branches
+        int curBranch = currentAct.GetBranchCount();
+        // Get the data at that branch
+        Branch currentBranch = currentAct.GetBranches()[curBranch];
+        // Get the max options for this branch
+        int numOfAnswers = currentBranch.maxBranches;
+        // Based on the index of the answer button
+        // Select the right narrative to branch to
+
+        int offset = currentEvent.dialogues[currentStepIndex - 1].delayToMainBranch;
+
+        string filePath = currentBranch.narrativeData[index + offset].filePath;
+
         // Reset to start of new event
         currentStepIndex = 0;
-        // Need a way to track the branching
-        currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(FileContainer.ActTwo_01);
+
+        // Increment Branch Count for Current Act
+        currentAct.IncrementBranchCount();
+
+        // Need a way to track the branching - Above might do it
+        currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(filePath);
+
+        // Basically, if there is branching narrative, that eventually goes back to "main branch"
+        // being the branch that ultimately progresses through the story
+        // Find out how many side narratives there are until you meet up
+        int delayToMainBranch = currentEvent.dialogues[currentStepIndex].delayToMainBranch;
+
+        // Rewind to main branch, then proceed
+        //currentAct.IncrementBranchCount();
+        currentAct.DecrementBranchCount(delayToMainBranch);
+        
+        
+
+        // Enable clicking
+        SetCanProceed(true);
+
+        // Load next dialogue
+        ProceedThroughDialogueEvent();
     }
 
 
@@ -170,34 +225,52 @@ public class Game : MonoBehaviour
             // Reached end of current branch
             // Get option count
             int numberOfPotentialAnswers = currentEvent.dialogues[currentStepIndex - 1].branchNumber;
+            Debug.Log("Step INdex: " + (currentStepIndex - 1).ToString());
+            string buttonText = "";
             for (int i = 0; i < numberOfPotentialAnswers; i++)
             {
-                SpawnAnswerButton(i);
+                // Get Act - I.E Act 2
+                Act currentAct = Acts.instance.GetCurrentAct();
+                // Get Number of Branches
+                int curBranch = currentAct.GetBranchCount();
+                Debug.Log("Branch Count: " + curBranch);
+                // Get the data at that branch
+                Branch currentBranch = currentAct.GetBranches()[curBranch];
+                // Get the data for the button
+                Debug.Log("Data" + currentBranch.narrativeData[i].answerData);
+                int offset = currentEvent.dialogues[currentStepIndex - 1].delayToMainBranch;
+
+                buttonText = currentBranch.narrativeData[i + offset].answerData;
+                // Pass it all through to the button
+                SpawnAnswerButton(i, buttonText); 
             }
-            bCanProceed = false;
+            SetCanProceed(false);
             Debug.Log("Index Out of Bounds");
             return;
         }
         ScrollUp();
-        switch(currentEvent.dialogues[currentStepIndex].branchNumber)
-        {
-            // Reset step index.
-            // Load Branching Narrative
-            // Assign new Text
 
-            // Continue current branch
-            case 0:
-                rpgText.text = currentEvent.dialogues[currentStepIndex].lyricString;
-                Debug.Log("Case 0 Activated");
-                break;
-            // Load new branch
-            case 1:
-                break;
-            case 2:
-                break;
-            default:
-                break;
-        }
+        rpgText.text = currentEvent.dialogues[currentStepIndex].lyricString;
+
+        //switch (currentEvent.dialogues[currentStepIndex].branchNumber)
+        //{
+        //    // Reset step index.
+        //    // Load Branching Narrative
+        //    // Assign new Text
+
+        //    // Continue current branch
+        //    case 0:
+        //        rpgText.text = currentEvent.dialogues[currentStepIndex].lyricString;
+        //        Debug.Log("Case 0 Activated");
+        //        break;
+        //    // Load new branch
+        //    case 1:
+        //        break;
+        //    case 2:
+        //        break;
+        //    default:
+        //        break;
+        //}
         bCanProceed = false;
         IncrementStepIndex();
     }
@@ -227,5 +300,12 @@ public class Game : MonoBehaviour
                 StartCoroutine(scroll.InitiateScroll());
             }
         }
+    }
+
+    void SetCanProceed(bool canProceed)
+    {
+        bCanProceed = canProceed;
+        if (OnProceedChanged != null)
+            OnProceedChanged(bCanProceed);
     }
 }

@@ -12,9 +12,5 @@ public class ResetAnchors : MonoBehaviour
         rect.ResetTransform();
         transform.parent.gameObject.SetActive(false);
     }
-    void Start ()
-    {
-		
-	}
-	
+
 }

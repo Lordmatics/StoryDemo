@@ -1,0 +1,13 @@
+// https://jsonformatter.curiousconcept.com/ // JSON checker for syntax
+// https://www.codeandweb.com/blog/2014/03/28/using-spritesheets-with-unity // texture packer pro
+
+// SUBTLY STROLL OVER THERE
+{
+  "dialogues": [
+	{
+	  "lyricString": "You try to act nonchalant - but the hunger is too much, you lose your balance and stumble into the table next to you... people start looking at you!",	  
+	  "delayToMainBranch": 1,
+	  "branchNumber": 1
+	}
+  ]
+}

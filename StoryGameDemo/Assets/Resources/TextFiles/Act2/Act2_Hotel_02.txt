@@ -1,18 +1,22 @@
 // https://jsonformatter.curiousconcept.com/ // JSON checker for syntax
 // https://www.codeandweb.com/blog/2014/03/28/using-spritesheets-with-unity // texture packer pro
 
+// CHECK OUT THE MENU
 {
   "dialogues": [
 	{
-	  "lyricString": "Menu added to inventory",	  
+	  "lyricString": "Menu added to inventory",	 
+	  "delayToMainBranch": 0,
 	  "branchNumber": 0
 	},
 	{
 	  "lyricString": "Woah! These prices are ridiculous! What is this, a hotel for millionaires?",	  
+	  "delayToMainBranch": 0,
 	  "branchNumber": 0
 	},
 	{
 	  "lyricString": "There's an open buffet table across the room... you need to grab some food here - you can barely stand.",
+	  "delayToMainBranch": 0,
 	  "branchNumber": 2
 	}
   ]

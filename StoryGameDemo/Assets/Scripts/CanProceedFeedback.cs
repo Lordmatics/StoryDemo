@@ -18,7 +18,7 @@ public class CanProceedFeedback : MonoBehaviour
 
     private void OnEnable()
     {
-        Invoke("LateEnable", 0.5f);
+        Invoke("LateEnable", 0.25f);
     }
 
     void LateEnable()
@@ -35,6 +35,7 @@ public class CanProceedFeedback : MonoBehaviour
     void SetIcon(bool enabled)
     {
         icon.enabled = enabled;
+        Debug.Log("Icon Enabled : " + enabled);
     }
     #endregion
 }

@@ -11,5 +11,6 @@ public struct Dialogues
 {
     //public Mood lyricMood;
     public string lyricString;
+    public int delayToMainBranch;
     public int branchNumber;
 }
