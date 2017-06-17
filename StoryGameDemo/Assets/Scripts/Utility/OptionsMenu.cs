@@ -9,11 +9,22 @@ public class OptionsMenu : MonoBehaviour
 
     public void EnableFirstCanvas(bool yes)
     {
+        foreach(Canvas c in canvases)
+        {
+            if(c == null)
+            {
+                Debug.Log("Error Options Missing Canvas References");
+                return;
+            }
+        }
+
         if(canvases.Length < 2)
         {
-            Debug.Log("Error Options Missing Canvas References");
+            Debug.Log("Error: Not enough canvases");
             return;
         }
+
+        
         canvases[0].gameObject.SetActive(yes);
         canvases[1].gameObject.SetActive(!yes);
     }
