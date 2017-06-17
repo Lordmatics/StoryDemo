@@ -11,5 +11,5 @@ public struct Dialogues
 {
     //public Mood lyricMood;
     public string lyricString;
-    public int selectedOption;
+    public int branchNumber;
 }

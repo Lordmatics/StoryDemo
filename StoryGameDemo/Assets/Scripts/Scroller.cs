@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[AddComponentMenu("Scripts/Game/Scroller")]
 public class Scroller : MonoBehaviour
 {
 

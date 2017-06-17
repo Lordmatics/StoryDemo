@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CanProceedFeedback : MonoBehaviour {
+[AddComponentMenu("Scripts/Game/CanProceedFeedback")]
+public class CanProceedFeedback : MonoBehaviour
+{
 
     [SerializeField]
     private Image icon;

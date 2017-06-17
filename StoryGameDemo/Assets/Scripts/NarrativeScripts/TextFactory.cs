@@ -10,7 +10,10 @@ using LitJson; // Needed for JsonMapper
 
 class FileContainer
 {
-    public static string TextName = "Act2_Hotel";
+    public static string Test = "Test/TestTextFile";
+    public static string ActTwo_01 = "Act2/Act2_Hotel_01";
+    public static string ActTwo_02 = "Act2/Act2_Hotel_02";
+
 }
 
 namespace TextFactory

@@ -7,7 +7,13 @@ using UnityEditor.SceneManagement;
 public class ChangeSceneEditor : Editor
 {
 
-    [MenuItem("OpenScene/Main")]
+    [MenuItem("OpenScene/MainMenu")]
+    public static void OpenMainMenuScene()
+    {
+        OpenScene("MainMenu");
+    }
+
+    [MenuItem("OpenScene/Game")]
     public static void OpenMainScene()
     {
         OpenScene("Main");

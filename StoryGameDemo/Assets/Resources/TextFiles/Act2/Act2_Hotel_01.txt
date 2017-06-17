@@ -4,12 +4,8 @@
 {
   "dialogues": [
     {
-      "lyricString": "Hello World",
-	  "selectedOption": 0
-    },
-	{
-	  "lyricString": "This is a test",	  
-	  "selectedOption": 0
-	}
+      "lyricString": "It looks like the hotel restaurant is open for breakfast!! You should check out the menu.",
+	  "branchNumber": 1
+    }
   ]
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-[AddComponentMenu("Scripts/Game/Game")]
+[AddComponentMenu("Scripts/GameController/Game")]
 public class Game : MonoBehaviour
 {
     public static bool bCanProceed = true;
@@ -24,7 +24,13 @@ public class Game : MonoBehaviour
     private RectTransform parentForScroll;
 
     [SerializeField]
+    private RectTransform parentForAnswers;
+
+    [SerializeField]
     private List<RectTransform> previousMessages = new List<RectTransform>();
+
+    [SerializeField]
+    private List<GameObject> buttonList = new List<GameObject>();
 
     [SerializeField]
     private float lerpSpeed = 5.0f;
@@ -43,12 +49,19 @@ public class Game : MonoBehaviour
         rpgText = GameObject.Find("RPG_Message").GetComponent<Text>();
         boxToDuplicate = GameObject.Find("TextBGPanel");
         parentForScroll = GameObject.Find("ScrollZone").GetComponent<RectTransform>();
+        parentForAnswers = GameObject.Find("AnswerButtonParent").GetComponent<RectTransform>();
     }
 
     private void Start()
     {
-        currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(FileContainer.TextName);
-        rpgText.text = currentEvent.dialogues[currentStepIndex++].lyricString;  
+        currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(FileContainer.ActTwo_01);
+        rpgText.text = currentEvent.dialogues[currentStepIndex++].lyricString;
+        //if(currentEvent.dialogues.Count <= 1)
+        //{
+        //    bCanProceed = false;
+        //    if (OnProceedChanged != null)
+        //        OnProceedChanged(bCanProceed);
+        //}
     }
 
     private void Update()
@@ -99,11 +112,6 @@ public class Game : MonoBehaviour
             }
             parentForScroll.offsetMin = leftBot;
             parentForScroll.offsetMax = rightTop;
-
-            // Move scroll up
-            //Vector2 pos = parentForScroll.sizeDelta;
-            //pos.y += scrollSpeed * Time.deltaTime;
-            //parentForScroll.sizeDelta = pos;
         }
     }
 
@@ -122,13 +130,56 @@ public class Game : MonoBehaviour
     }
     #endregion
 
-    public void ProceedThroughDialogueEvent(int selectedOption)
+    void SpawnAnswerButton(int index)
     {
-        if (!bCanProceed) return;
-        if (currentStepIndex >= currentEvent.dialogues.Count) return;
+        Debug.Log("SpawnButton");
+        GameObject button = (GameObject)Instantiate(Resources.Load("Prefabs/AnswerButton"));
+        button.transform.SetParent(parentForAnswers);
+        ButtonAnswer script = button.GetComponent<ButtonAnswer>() ? button.GetComponent<ButtonAnswer>() : button.AddComponent<ButtonAnswer>();
+        script.SetOptionIndex(index);
+        buttonList.Add(button);
+    }
 
+    public void DestroyButtons()
+    {
+        foreach(GameObject obj in buttonList)
+        {
+            Destroy(obj);
+        }
+        buttonList.Clear();
+    }
+
+    public void BranchNarrative(int index)
+    {
+        // Reset to start of new event
+        currentStepIndex = 0;
+        // Need a way to track the branching
+        currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(FileContainer.ActTwo_01);
+    }
+
+
+    public void ProceedThroughDialogueEvent()
+    {
+        if (!bCanProceed)
+        {
+            Debug.Log("bCanProceed == false");
+            return;
+        }
+        if (currentStepIndex >= currentEvent.dialogues.Count)
+        {
+            // Reached end of current branch
+            // Get option count
+            int numberOfPotentialAnswers = currentEvent.dialogues[currentStepIndex - 1].branchNumber;
+            for (int i = 0; i < numberOfPotentialAnswers; i++)
+            {
+                SpawnAnswerButton(i);
+            }
+            bCanProceed = false;
+            Debug.Log("Index Out of Bounds");
+            return;
+        }
         ScrollUp();
-        switch(currentEvent.dialogues[currentStepIndex].selectedOption)
+        switch(currentEvent.dialogues[currentStepIndex].branchNumber)
         {
             // Reset step index.
             // Load Branching Narrative
@@ -137,6 +188,7 @@ public class Game : MonoBehaviour
             // Continue current branch
             case 0:
                 rpgText.text = currentEvent.dialogues[currentStepIndex].lyricString;
+                Debug.Log("Case 0 Activated");
                 break;
             // Load new branch
             case 1:
@@ -154,18 +206,19 @@ public class Game : MonoBehaviour
     {
         // Duplicate contents.
         GameObject message = (GameObject)Instantiate(boxToDuplicate);
+        // Make sure only the original text box can proceed the dialogue
+        Destroy(message.GetComponent<TextBoxPressed>());
         RectTransform rect = message.GetComponent<RectTransform>();
-
+        // Set parent to enable scrolling manually and apply the mask
         message.transform.SetParent(parentForScroll);
+        // Default anchor position, since the scroll maths, is + 0.35f on the anchors
         rect.anchorMin = new Vector2(0.0f, -0.35f);
         rect.anchorMax = new Vector2(1.0f, 0.0f);
-        //rect.ResetTransform();
-
-        previousMessages.Add(rect);
-        //StartCoroutine(PerformScroll());
         // Add to scroll container
+        previousMessages.Add(rect);
         // Lerp all contents up
-
+        // Doing it this way, makes them move in unison
+        // As opposed to waiting for each box to finish
         foreach (RectTransform t in previousMessages)
         {
             Scroller scroll = t.GetComponent<Scroller>();
@@ -174,51 +227,5 @@ public class Game : MonoBehaviour
                 StartCoroutine(scroll.InitiateScroll());
             }
         }
-    }
-
-    IEnumerator PerformScroll()
-    {
-        yield return null;
-        foreach(RectTransform t in previousMessages)
-        {
-            //float targetMinY = t.anchorMin.y + 0.35f;
-            //float targetMaxY = t.anchorMax.y + 0.35f;
-            //while(t.anchorMin.y < targetMinY && t.anchorMax.y < targetMaxY)
-            //{
-            //    float newMinY = t.anchorMin.y;
-            //    newMinY = Mathf.Lerp(t.anchorMin.y, targetMinY + 0.01f, lerpSpeed * Time.deltaTime);
-            //    t.anchorMin = new Vector2(0.0f, newMinY);
-
-            //    //t.ResetTransform();
-
-            //    float newMaxY = t.anchorMax.y;
-            //    newMaxY = Mathf.Lerp(t.anchorMax.y, targetMaxY + 0.01f, lerpSpeed * Time.deltaTime);
-            //    t.anchorMax = new Vector2(1.0f, newMaxY);
-
-            //    t.ResetTransform();
-
-            //    yield return null;
-            //}
-        }
-        //rect.anchorMin = new Vector2(0.0f, 0.0f);
-        //rect.anchorMax = new Vector2(1.0f, 0.35f);
-        //rect.ResetTransform();
-
-        //Vector2 newAnchorMin = new Vector2(previousMessages[0].anchorMin.x, previousMessages[0].anchorMin.y + 0.35f);
-        //Vector2 newAnchorMax = new Vector2(previousMessages[0].anchorMax.x, previousMessages[0].anchorMax.x + 0.35f);
-
-        //float newMinY = previousMessages[0].anchorMin.y + 0.35f;
-        //float newMaxY = previousMessages[0].anchorMax.y + 0.35f;
-
-        //float target = boxToDuplicate.transform.position.y + 200.0f;
-        //while(previousMessages[0].transform.position.y != target)
-        //{
-        //    foreach(RectTransform obj in previousMessages)
-        //    {
-        //        Vector2 pos = obj.anchoredPosition;
-        //        pos.y += 200.0f / 2.0f;
-        //        yield return null;
-        //    }
-        //}
     }
 }
