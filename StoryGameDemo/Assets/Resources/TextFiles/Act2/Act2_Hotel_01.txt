@@ -5,9 +5,11 @@
 {
   "dialogues": [
     {
-      "lyricString": "It looks like the hotel restaurant is open for breakfast!! You should check out the menu.",
+      "sentence": "It looks like the hotel restaurant is open for breakfast!! You should check out the menu.",
 	  "targetBranchNum": 1,
-	  "possibleAnswersNum": 1
+	  "possibleAnswersNum": 1,
+	  "bIsVideo" : false,
+	  "videoPath" : ""
     }
   ]
 }

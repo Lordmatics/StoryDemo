@@ -4,14 +4,18 @@
 {
   "dialogues": [
     {
-      "lyricString": "Hello World",
+      "sentence": "Hello World",
 	  "targetBranchNum": 0,
-	  "possibleAnswersNum": 0
+	  "possibleAnswersNum": 0,
+	  "bIsVideo" : false,
+	  "videoPath" : ""
     },
 	{
-	  "lyricString": "This is a test",	  
+	  "sentence": "This is a test",	  
 	  "targetBranchNum": 0,
-	  "possibleAnswersNum": 0
+	  "possibleAnswersNum": 0,
+	  "bIsVideo" : false,
+	  "videoPath" : ""
 	}
   ]
 }

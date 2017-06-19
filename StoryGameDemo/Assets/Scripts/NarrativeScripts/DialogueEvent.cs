@@ -10,7 +10,9 @@ public class DialogueEvent
 public struct Dialogues
 {
     //public Mood lyricMood;
-    public string lyricString;
+    public string sentence;
     public int targetBranchNum;
     public int possibleAnswersNum;
+    public bool bIsVideo;
+    public string videoPath;
 }

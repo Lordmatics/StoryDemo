@@ -6,9 +6,11 @@
 {
   "dialogues": [
 	{
-	  "lyricString": "You stuff your face like it's your last meal, until your hand is taken from you... it feels like it's gripped in a vice. It takes you a moment to realise it's in another hand... you never get chance to look who it belongs to. You're dragged out of the room.",	  
+	  "sentence": "You stuff your face like it's your last meal, until your hand is taken from you... it feels like it's gripped in a vice. It takes you a moment to realise it's in another hand... you never get chance to look who it belongs to. You're dragged out of the room.",	  
 	  "targetBranchNum": 6,
-	  "possibleAnswersNum": 3
+	  "possibleAnswersNum": 3,
+	  "bIsVideo" : false,
+	  "videoPath" : ""
 	}
   ]
 }

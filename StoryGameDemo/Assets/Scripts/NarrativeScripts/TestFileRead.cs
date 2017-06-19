@@ -11,7 +11,7 @@ public class TestFileRead : MonoBehaviour
         DialogueEvent dialogue = TextAssembly.RunTextFactoryForFile("Test/TestTextFile");
         for (int i = 0; i < dialogue.dialogues.Count; i++)
         {
-            Debug.Log(dialogue.dialogues[i].lyricString);
+            Debug.Log(dialogue.dialogues[i].sentence);
         }
     }
 

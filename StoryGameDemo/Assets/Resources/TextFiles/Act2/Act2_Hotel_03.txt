@@ -5,9 +5,11 @@
 {
   "dialogues": [
 	{
-	  "lyricString": "You try to act nonchalant - but the hunger is too much, you lose your balance and stumble into the table next to you... people start looking at you!",	  
+	  "sentence": "You try to act nonchalant - but the hunger is too much, you lose your balance and stumble into the table next to you... people start looking at you!",	  
 	  "targetBranchNum": 3,
-	  "possibleAnswersNum": 1
+	  "possibleAnswersNum": 1,
+	  "bIsVideo" : false,
+	  "videoPath" : ""
 	}
   ]
 }

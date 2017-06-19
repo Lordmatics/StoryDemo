@@ -5,19 +5,25 @@
 {
   "dialogues": [
 	{
-	  "lyricString": "Menu added to inventory",	 
+	  "sentence": "Menu added to inventory",	 
 	  "targetBranchNum": 2,
-	  "possibleAnswersNum": 0
+	  "possibleAnswersNum": 0,
+	  "bIsVideo" : false,
+	  "videoPath" : ""
 	},
 	{
-	  "lyricString": "Woah! These prices are ridiculous! What is this, a hotel for millionaires?",	  
+	  "sentence": "Woah! These prices are ridiculous! What is this, a hotel for millionaires?",	  
 	  "targetBranchNum": 2,
-	  "possibleAnswersNum": 0
+	  "possibleAnswersNum": 0,
+	  "bIsVideo" : false,
+	  "videoPath" : ""
 	},
 	{
-	  "lyricString": "There's an open buffet table across the room... you need to grab some food here - you can barely stand.",
+	  "sentence": "There's an open buffet table across the room... you need to grab some food here - you can barely stand.",
 	  "targetBranchNum": 2,
-	  "possibleAnswersNum": 2
+	  "possibleAnswersNum": 2,
+	  "bIsVideo" : false,
+	  "videoPath" : ""
 	}
   ]
 }

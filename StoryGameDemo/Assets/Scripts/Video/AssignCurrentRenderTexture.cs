@@ -24,6 +24,7 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
 
     public Action OnVideoEnd;
 
+    public bool bCanInteractWithVideo = false;
     bool bIsPaused = false;
     bool bFinishedCurrentClip = false;
 
@@ -49,6 +50,7 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
         videoPlayer.Stop();
         audioSource.Stop();
         SetAlpha(0.0f);
+        DisableVideo();
     }
 
     void Start ()
@@ -60,22 +62,47 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
         videoPlayer.EnableAudioTrack(0, true);
         videoPlayer.SetTargetAudioSource(0, audioSource);
 
+        DisableVideo();
+        //StartCoroutine(PlayVideoAt("Videos/Test/TestA", OnVideoEnd));
 
-        PlayVideoAt("Videos/Test/TestA");
         //double length = videoPlayer.clip.length;
         //Debug.Log("Length Of Video: " + length + "s");
     }
 
-    public void PlayVideoAt(string filePath)
+    public void EnableVideo()
     {
+        image.enabled = true;
+    }
+
+    public void DisableVideo()
+    {
+        image.enabled = false;
+    }
+
+    public IEnumerator PlayVideoAt(string filePath, Action Callback)
+    {
+        Callback += OnVideoEnd;
         //"Videos/Test/Video"
+        videoPlayer.Prepare();
+
+        WaitForSeconds waitTime = new WaitForSeconds(1);
+        while (!videoPlayer.isPrepared)
+        {
+            Debug.Log("Preparing Video");
+            yield return waitTime;
+            break;
+        }
+        Debug.Log("Finished Preparations");
+
+        EnableVideo();
         videoPlayer.clip = (VideoClip)Resources.Load(filePath);
         videoPlayer.Play();
-        StartCoroutine(OnVideoFinished(OnVideoEnd));
+        StartCoroutine(OnVideoFinished(Callback));
         audioSource.Play();
         RenderTexture texture = (RenderTexture)Resources.Load("Videos/Test/VideoRT");
         SetRenderTexture(texture);
         SetAlpha(1.0f);
+        yield break;
     }
 
     private IEnumerator OnVideoFinished(Action Callback)
@@ -87,6 +114,7 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
         if(Callback != null)
         {
             Callback();
+            Callback -= OnVideoEnd;
         }
         yield break;
     }
@@ -115,7 +143,8 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        PauseOrResume();
+        if(bCanInteractWithVideo)
+            PauseOrResume();
     }
 
     void PauseOrResume()

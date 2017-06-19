@@ -61,7 +61,7 @@ public class Game : MonoBehaviour
     private void Start()
     {
         currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(FileContainer.ActTwo_01);
-        rpgText.text = currentEvent.dialogues[currentStepIndex++].lyricString;
+        rpgText.text = currentEvent.dialogues[currentStepIndex++].sentence;
         Debug.Log("Count" + currentEvent.dialogues.Count + " stepindex " + currentStepIndex);
         eventTarget = currentEvent.dialogues[currentStepIndex - 1].targetBranchNum;
         //if(currentEvent.dialogues.Count <= 1)
@@ -212,9 +212,21 @@ public class Game : MonoBehaviour
     }
 
 
+    Action VideoCallback;
+
+    private void OnEnable()
+    {
+        VideoCallback += ProceedThroughDialogueEvent;
+    }
+
+    private void OnDisable()
+    {
+        VideoCallback -= ProceedThroughDialogueEvent;
+    }
+
     public void ProceedThroughDialogueEvent()
     {
-
+        Debug.Log("VideoCallback Ran");
         if (!bCanProceed)
         {
             //Debug.Log("bCanProceed == false");
@@ -233,24 +245,34 @@ public class Game : MonoBehaviour
             int curBranch = currentAct.GetBranchCount();
             // Cache current branch
             Branch currentBranch = currentAct.GetBranches()[curBranch];
-            for (int i = 0; i < numberOfPotentialAnswers; i++)
+            bool bVidNotButton = currentEvent.dialogues[currentStepIndex - 1].bIsVideo;
+            if(bVidNotButton)
             {
-                // Extract button data from current branch config
-                if(i >= currentBranch.narrativeData.Count)
-                {
-                    
-                    Debug.Log("No More Narrative Data At Branch: " + curBranch);
-                    return;
-                }
-                buttonText = currentBranch.narrativeData[i].answerData;
-                SpawnAnswerButton(i, buttonText); 
+                string vidPath = currentEvent.dialogues[currentStepIndex - 1].videoPath;
+                StartCoroutine(AssignCurrentRenderTexture.instance.PlayVideoAt(vidPath, VideoCallback));
             }
+            else
+            {
+                for (int i = 0; i < numberOfPotentialAnswers; i++)
+                {
+                    // Extract button data from current branch config
+                    if (i >= currentBranch.narrativeData.Count)
+                    {
+
+                        Debug.Log("No More Narrative Data At Branch: " + curBranch);
+                        return;
+                    }
+                    buttonText = currentBranch.narrativeData[i].answerData;
+                    SpawnAnswerButton(i, buttonText);
+                }
+            }
+
             SetCanProceed(false);
             return;
         }
         ScrollUp();
 
-        rpgText.text = currentEvent.dialogues[currentStepIndex].lyricString;
+        rpgText.text = currentEvent.dialogues[currentStepIndex].sentence;
         eventTarget = currentEvent.dialogues[currentStepIndex].targetBranchNum;
 
         // Okay... this is to make sure, you return to the main branch
