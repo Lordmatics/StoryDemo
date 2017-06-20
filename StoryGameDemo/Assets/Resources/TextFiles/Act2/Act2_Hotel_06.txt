@@ -1,16 +1,16 @@
 // https://jsonformatter.curiousconcept.com/ // JSON checker for syntax
 // https://www.codeandweb.com/blog/2014/03/28/using-spritesheets-with-unity // texture packer pro
 
-// Your Mum
-// Next video incoming
+// Continue
+// First video incoming
 {
   "dialogues": [
 	{
 	  "sentence": "You stuff your face like it's your last meal, until your hand is taken from you... it feels like it's gripped in a vice. It takes you a moment to realise it's in another hand... you never get chance to look who it belongs to. You're dragged out of the room.",	  
-	  "targetBranchNum": 6,
+	  "targetBranchNum": 5,
 	  "possibleAnswersNum": 3,
-	  "bIsVideo" : false,
-	  "videoPath" : ""
+	  "bIsVideo" : true,
+	  "videoPath" : "Videos/Test/TestA"
 	}
   ]
 }

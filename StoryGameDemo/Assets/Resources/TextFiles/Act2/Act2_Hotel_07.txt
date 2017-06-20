@@ -1,0 +1,15 @@
+// https://jsonformatter.curiousconcept.com/ // JSON checker for syntax
+// https://www.codeandweb.com/blog/2014/03/28/using-spritesheets-with-unity // texture packer pro
+
+// Your Mum
+{
+  "dialogues": [
+	{
+	  "sentence": "Video: Ricky Rage Thompson Left",	  
+	  "targetBranchNum": 9,
+	  "possibleAnswersNum": 2,
+	  "bIsVideo" : true,
+	  "videoPath" : "Videos/Test/TestA"
+	}
+  ]
+}

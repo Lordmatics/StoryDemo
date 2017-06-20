@@ -64,14 +64,9 @@ public class Game : MonoBehaviour
         rpgText.text = currentEvent.dialogues[currentStepIndex++].sentence;
         Debug.Log("Count" + currentEvent.dialogues.Count + " stepindex " + currentStepIndex);
         eventTarget = currentEvent.dialogues[currentStepIndex - 1].targetBranchNum;
-        //if(currentEvent.dialogues.Count <= 1)
-        //{
-        //    bCanProceed = false;
-        //    if (OnProceedChanged != null)
-        //        OnProceedChanged(bCanProceed);
-        //}
     }
 
+    #region DEBUG
     public Text curActText;
     public Text curBranchNum;
     public Text curBranchIndex;
@@ -79,7 +74,7 @@ public class Game : MonoBehaviour
     public Text curData;
     public Text target;
     public Text eventTargetText;
-
+    #endregion
     void DebugHelper()
     {
         Act currentAct = Acts.instance.GetCurrentAct();
@@ -204,6 +199,10 @@ public class Game : MonoBehaviour
         // Need a way to track the branching - Above might do it
         currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(filePath);
 
+        if(currentEvent.dialogues[currentStepIndex].bIsVideo)
+        {
+            ProceedThroughDialogueEvent();
+        }
         // Enable clicking
         SetCanProceed(true);
 
@@ -216,12 +215,40 @@ public class Game : MonoBehaviour
 
     private void OnEnable()
     {
-        VideoCallback += ProceedThroughDialogueEvent;
+        //VideoCallback += ProceedThroughDialogueEvent;
+        VideoCallback += CreateAnswers;
+
     }
 
     private void OnDisable()
     {
-        VideoCallback -= ProceedThroughDialogueEvent;
+        //VideoCallback -= ProceedThroughDialogueEvent;
+        VideoCallback -= CreateAnswers;
+    }
+
+    void CreateAnswers()
+    {
+        Act currentAct = Acts.instance.GetCurrentAct();
+        int dialogueIndex = currentStepIndex - 1;
+        Debug.Log("DialogueIndex: " + dialogueIndex);
+        int numberOfPotentialAnswers = currentEvent.dialogues[dialogueIndex].possibleAnswersNum;
+        string buttonText = "";
+        int curBranch = currentAct.GetBranchCount();
+        // Cache current branch
+        Branch currentBranch = currentAct.GetBranches()[curBranch];
+        for (int i = 0; i < numberOfPotentialAnswers; i++)
+        {
+            Debug.Log("Data" + currentBranch.narrativeData[i].answerData);
+            // Extract button data from current branch config
+            if (i >= currentBranch.narrativeData.Count)
+            {
+
+                Debug.Log("No More Narrative Data At Branch: " + curBranch);
+                return;
+            }
+            buttonText = currentBranch.narrativeData[i].answerData;
+            SpawnAnswerButton(i, buttonText);
+        }
     }
 
     public void ProceedThroughDialogueEvent()
@@ -240,31 +267,33 @@ public class Game : MonoBehaviour
 
             // Reached end of current branch
             // Spawn Answer buttons
-            int numberOfPotentialAnswers = currentEvent.dialogues[currentStepIndex - 1].possibleAnswersNum;
-            string buttonText = "";
-            int curBranch = currentAct.GetBranchCount();
+            //int numberOfPotentialAnswers = currentEvent.dialogues[currentStepIndex - 1].possibleAnswersNum;
+            //string buttonText = "";
+            //int curBranch = currentAct.GetBranchCount();
             // Cache current branch
-            Branch currentBranch = currentAct.GetBranches()[curBranch];
+            //Branch currentBranch = currentAct.GetBranches()[curBranch];
             bool bVidNotButton = currentEvent.dialogues[currentStepIndex - 1].bIsVideo;
             if(bVidNotButton)
             {
+                //BranchNarrative(0);
                 string vidPath = currentEvent.dialogues[currentStepIndex - 1].videoPath;
-                StartCoroutine(AssignCurrentRenderTexture.instance.PlayVideoAt(vidPath, VideoCallback));
+                StartCoroutine(AssignCurrentRenderTexture.instance.PlayVideoAt(vidPath, VideoCallback, false));
             }
             else
             {
-                for (int i = 0; i < numberOfPotentialAnswers; i++)
-                {
-                    // Extract button data from current branch config
-                    if (i >= currentBranch.narrativeData.Count)
-                    {
+                CreateAnswers();
+                //for (int i = 0; i < numberOfPotentialAnswers; i++)
+                //{
+                //    // Extract button data from current branch config
+                //    if (i >= currentBranch.narrativeData.Count)
+                //    {
 
-                        Debug.Log("No More Narrative Data At Branch: " + curBranch);
-                        return;
-                    }
-                    buttonText = currentBranch.narrativeData[i].answerData;
-                    SpawnAnswerButton(i, buttonText);
-                }
+                //        Debug.Log("No More Narrative Data At Branch: " + curBranch);
+                //        return;
+                //    }
+                //    buttonText = currentBranch.narrativeData[i].answerData;
+                //    SpawnAnswerButton(i, buttonText);
+                //}
             }
 
             SetCanProceed(false);

@@ -79,9 +79,10 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
         image.enabled = false;
     }
 
-    public IEnumerator PlayVideoAt(string filePath, Action Callback)
+    public IEnumerator PlayVideoAt(string filePath, Action Callback, bool bAutoClose = false)
     {
-        Callback += OnVideoEnd;
+        if(bAutoClose)
+            Callback += OnVideoEnd;
         //"Videos/Test/Video"
         videoPlayer.Prepare();
 
@@ -97,7 +98,7 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
         EnableVideo();
         videoPlayer.clip = (VideoClip)Resources.Load(filePath);
         videoPlayer.Play();
-        StartCoroutine(OnVideoFinished(Callback));
+        StartCoroutine(OnVideoFinished(Callback, bAutoClose));
         audioSource.Play();
         RenderTexture texture = (RenderTexture)Resources.Load("Videos/Test/VideoRT");
         SetRenderTexture(texture);
@@ -105,7 +106,7 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
         yield break;
     }
 
-    private IEnumerator OnVideoFinished(Action Callback)
+    private IEnumerator OnVideoFinished(Action Callback, bool bAutoClose)
     {
         while(videoPlayer.isPlaying || bIsPaused)
         {
@@ -114,7 +115,8 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
         if(Callback != null)
         {
             Callback();
-            Callback -= OnVideoEnd;
+            if(bAutoClose)
+                Callback -= OnVideoEnd;
         }
         yield break;
     }

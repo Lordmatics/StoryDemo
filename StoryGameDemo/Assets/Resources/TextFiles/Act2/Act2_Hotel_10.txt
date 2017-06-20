@@ -1,0 +1,16 @@
+// https://jsonformatter.curiousconcept.com/ // JSON checker for syntax
+// https://www.codeandweb.com/blog/2014/03/28/using-spritesheets-with-unity // texture packer pro
+
+// hope you got a warranty
+// Game Over
+{
+  "dialogues": [
+	{
+	  "sentence": "Video: Ricky Rage Thompson  GAME OVER",	  
+	  "targetBranchNum": -1,
+	  "possibleAnswersNum": 0,
+	  "bIsVideo" : false,
+	  "videoPath" : ""
+	}
+  ]
+}
