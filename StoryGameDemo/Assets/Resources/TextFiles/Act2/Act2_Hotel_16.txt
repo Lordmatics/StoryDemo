@@ -6,11 +6,11 @@
   "dialogues": [
 	{
 	  "sentence": "Video: Ricky Rage Thompson Right Deal",	  
-	  "currentBranchNum": 15,
-	  "targetBranchNum": 16,
+	  "currentBranchNum": 14,
+	  "targetBranchNum": 15,
 	  "possibleAnswersNum": 1,
 	  "bIsVideo" : true,
-	  "videoPath" : "Videos/Test/TestA"
+	  "videoPath" : "Videos/Test/Act_02/WhatsInBag"
 	}
   ]
 }

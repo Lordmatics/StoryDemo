@@ -61,7 +61,7 @@ public class Game : MonoBehaviour
 
     private void Start()
     {
-        currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(FileContainer.ActTwo_01);
+        currentEvent = TextFactory.TextAssembly.RunTextFactory<DialogueEvent>(FileContainer.ActTwo_01);
         rpgText.text = currentEvent.dialogues[currentStepIndex++].sentence;
         Debug.Log("Count" + currentEvent.dialogues.Count + " stepindex " + currentStepIndex);
         eventTarget = currentEvent.dialogues[currentStepIndex - 1].targetBranchNum;
@@ -151,8 +151,8 @@ public class Game : MonoBehaviour
     #region OnTextPressed
     void IncrementStepIndex()
     {
-        currentStepIndex++;
-        if (currentStepIndex >= currentEvent.dialogues.Count)
+        bool bVideo = currentEvent.dialogues[currentStepIndex++].bIsVideo;
+        if (currentStepIndex >= currentEvent.dialogues.Count && !bVideo)
         {
             SetCanProceed(false);
         }
@@ -210,10 +210,11 @@ public class Game : MonoBehaviour
         // Enable clicking
         SetCanProceed(true);
 
+        // Makes video autoplay
         if (currentEvent.dialogues[currentStepIndex].bIsVideo)
         {
             ProceedThroughDialogueEvent();
-            ProceedThroughDialogueEvent();
+            //Debug.Log("Proceed on a video");
         }
 
 
@@ -238,9 +239,10 @@ public class Game : MonoBehaviour
 
     void CreateAnswers()
     {
+        // Prevent this from being repeated maybe?
         Act currentAct = Acts.instance.GetCurrentAct();
         int dialogueIndex = currentStepIndex - 1;
-        Debug.Log("DialogueIndex: " + dialogueIndex);
+        //Debug.Log("DialogueIndex: " + dialogueIndex);
         int numberOfPotentialAnswers = currentEvent.dialogues[dialogueIndex].possibleAnswersNum;
         string buttonText = "";
         int curBranch = currentAct.GetBranchCount();
@@ -248,11 +250,11 @@ public class Game : MonoBehaviour
         Branch currentBranch = currentAct.GetBranches()[curBranch];
         for (int i = 0; i < numberOfPotentialAnswers; i++)
         {
-            Debug.Log("Data" + currentBranch.narrativeData[i].answerData);
+            //Debug.Log("Data" + currentBranch.narrativeData[i].answerData);
             // Extract button data from current branch config
             if (i >= currentBranch.narrativeData.Count)
             {
-                Debug.Log("No More Narrative Data At Branch: " + curBranch);
+                //Debug.Log("No More Narrative Data At Branch: " + curBranch);
                 return;
             }
             buttonText = currentBranch.narrativeData[i].answerData;
@@ -262,7 +264,7 @@ public class Game : MonoBehaviour
 
     public void ProceedThroughDialogueEvent()
     {
-        Debug.Log("VideoCallback Ran");
+        //Debug.Log("VideoCallback Ran");
         if (!bCanProceed)
         {
             //Debug.Log("bCanProceed == false");
@@ -270,6 +272,7 @@ public class Game : MonoBehaviour
         }
         // Cache current act
         Act currentAct = Acts.instance.GetCurrentAct();
+        Debug.Log("-----------------CurrentStepIndex:" + currentStepIndex.ToString() + " Count: " + currentEvent.dialogues.Count.ToString());
         if (currentStepIndex >= currentEvent.dialogues.Count)
         {
             // Need a constraint here, if there are no more narrative entries for this act
@@ -285,13 +288,14 @@ public class Game : MonoBehaviour
             if(bVidNotButton)
             {
                 //BranchNarrative(0);
-                Debug.Log("Video Should Start");
+                //Debug.Log("Video Should Start");
                 string vidPath = currentEvent.dialogues[currentStepIndex - 1].videoPath;
                 StartCoroutine(AssignCurrentRenderTexture.instance.PlayVideoAt(vidPath, VideoCallback, false));
                 
             }
             else
             {
+                //Debug.Log("Create Answers");
                 CreateAnswers();
                 //for (int i = 0; i < numberOfPotentialAnswers; i++)
                 //{
@@ -327,21 +331,27 @@ public class Game : MonoBehaviour
         // Assuming a tangent was undergone
         int curBranchID = currentEvent.dialogues[currentStepIndex].currentBranchNum;
         int difference = eventTarget - targetBranchNumber;
-        //Debug.Log("Diff: " + difference);
-        //Debug.Log("ET: " + eventTarget);
-        //Debug.Log("TBN: " + targetBranchNumber);
-        //Debug.Log("CBN: " + currentEvent.dialogues[currentStepIndex].currentBranchNum);
-        if (difference > 0)
-        {
-            targetBranchNumber += difference;
-            for (int i = 0; i < difference; i++)
-            {
-                //Debug.Log("Branch Count" + currentAct.GetBranchCount());
-                currentAct.IncrementBranchCount();
-            }
-            //Debug.Log("END Branch Count" + currentAct.GetBranchCount());
+        //for (int i = curBranchID; i < testTarget; i++)
+        //{
+        //    currentAct.IncrementBranchCount();
+        //}
+        Debug.Log("Diff: " + difference);
+        Debug.Log("ET: " + eventTarget);
+        Debug.Log("TBN: " + targetBranchNumber);
+        Debug.Log("CBN: " + currentEvent.dialogues[currentStepIndex].currentBranchNum);
 
-        }
+        currentAct.SetBranchCount(curBranchID);
+        //if (difference > 0)
+        //{
+        //    targetBranchNumber += difference;
+        //    for (int i = 0; i < difference; i++)
+        //    {
+        //        //Debug.Log("Branch Count" + currentAct.GetBranchCount());
+        //        currentAct.IncrementBranchCount();
+        //    }
+        //    //Debug.Log("END Branch Count" + currentAct.GetBranchCount());
+
+        //}
 
         //int prevBranchNum = eventTarget - targetBranchNumber;
         //int loops = curBranchID - prevBranchNum;
@@ -350,8 +360,7 @@ public class Game : MonoBehaviour
         //{
         //    currentAct.IncrementBranchCount();
         //}
-
-        bCanProceed = false;
+        //SetCanProceed(false);
         IncrementStepIndex();
     }
 

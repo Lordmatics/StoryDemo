@@ -70,17 +70,6 @@
 	},
 	{
 	  "branchIndex": 4,	 
-	  "numOfAnswers": 0,
-	  "narrativeData": 
-	  [
-		  {
-			"filePath": "",
-			"answerData": "Removed"
-		  }
-	  ]
-	},
-	{
-	  "branchIndex": 5,	 
 	  "numOfAnswers": 3,
 	  "narrativeData": 
 	  [
@@ -99,7 +88,7 @@
 	  ]
 	},
 	{
-	  "branchIndex": 6,	 
+	  "branchIndex": 5,	 
 	  "numOfAnswers": 2,
 	  "narrativeData": 
 	  [
@@ -114,7 +103,7 @@
 	  ]
 	},
 	{
-	  "branchIndex": 7,	 
+	  "branchIndex": 6,	 
 	  "numOfAnswers": 2,
 	  "narrativeData": 
 	  [
@@ -129,7 +118,7 @@
 	  ]
 	},
 	{
-	  "branchIndex": 8,	 
+	  "branchIndex": 7,	 
 	  "numOfAnswers": 1,
 	  "narrativeData": 
 	  [
@@ -140,29 +129,29 @@
 	  ]
 	},
 	{
-	  "branchIndex": 9,	 
+	  "branchIndex": 8,	 
 	  "numOfAnswers": 0,
 	  "narrativeData": 
 	  [
 		  {
 			"filePath": "",
 			"answerData": "GAMEOVER"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 9,	 
+	  "numOfAnswers": 1,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_12",
+			"answerData": "Deal"
 		  }
 	  ]
 	},
 	{
 	  "branchIndex": 10,	 
-	  "numOfAnswers": 1,
-	  "narrativeData": 
-	  [
-		  {
-			"filePath": "Act2/Act2_Hotel_12",
-			"answerData": "Deal"
-		  }
-	  ]
-	},
-	{
-	  "branchIndex": 11,	 
 	  "numOfAnswers": 0,
 	  "narrativeData": 
 	  [
@@ -173,7 +162,7 @@
 	  ]
 	},
 	{
-	  "branchIndex": 12,	 
+	  "branchIndex": 11,	 
 	  "numOfAnswers": 1,
 	  "narrativeData": 
 	  [
@@ -184,7 +173,7 @@
 	  ]
 	},
 	{
-	  "branchIndex": 13,	 
+	  "branchIndex": 12,	 
 	  "numOfAnswers": 2,
 	  "narrativeData": 
 	  [
@@ -195,6 +184,17 @@
 		  {
 		  	"filePath": "Act2/Act2_Hotel_16",
 			"answerData": "What's in the bag"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 13,	 
+	  "numOfAnswers": 1,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_17",
+			"answerData": "Fine"
 		  }
 	  ]
 	},
@@ -211,17 +211,6 @@
 	},
 	{
 	  "branchIndex": 15,	 
-	  "numOfAnswers": 1,
-	  "narrativeData": 
-	  [
-		  {
-			"filePath": "Act2/Act2_Hotel_17",
-			"answerData": "Fine"
-		  }
-	  ]
-	},
-	{
-	  "branchIndex": 16,	 
 	  "numOfAnswers": 0,
 	  "narrativeData": 
 	  [

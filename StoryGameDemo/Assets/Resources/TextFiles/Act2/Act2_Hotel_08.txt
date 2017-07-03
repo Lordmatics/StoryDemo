@@ -6,11 +6,11 @@
   "dialogues": [
 	{
 	  "sentence": "Video: Ricky Rage Thompson Mid",	  
-	  "currentBranchNum": 7,
-	  "targetBranchNum": 13,
+	  "currentBranchNum": 6,
+	  "targetBranchNum": 12,
 	  "possibleAnswersNum": 2,
 	  "bIsVideo" : true,
-	  "videoPath" : "Videos/Test/TestA"
+	  "videoPath" : "Videos/Test/Act_02/NeededFood"
 	}
   ]
 }

@@ -7,7 +7,7 @@
   "dialogues": [
 	{
 	  "sentence": "Video: Ricky Rage Thompson  GAME OVER",	  
-	  "currentBranchNum": 9,
+	  "currentBranchNum": 8,
 	  "targetBranchNum": -1,
 	  "possibleAnswersNum": 0,
 	  "bIsVideo" : false,

@@ -8,10 +8,10 @@
 	{
 	  "sentence": "Continue...",	  
 	  "currentBranchNum": 4,
-	  "targetBranchNum": 6,
+	  "targetBranchNum": 5,
 	  "possibleAnswersNum": 3,
 	  "bIsVideo" : true,
-	  "videoPath" : "Videos/Test/TestA"
+	  "videoPath" : "Videos/Test/Act_02/Food"
 	}
   ]
 }

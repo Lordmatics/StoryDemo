@@ -27,7 +27,9 @@ public class ActEvent
 [System.Serializable]
 public class Act
 {
+    [SerializeField]
     private int branchCount;
+    [SerializeField]
     private string name;
 
     [SerializeField]
@@ -50,9 +52,14 @@ public class Act
         branchCount++;
     }
 
+    public void SetBranchCount(int newBranchCount)
+    {
+        branchCount = newBranchCount;
+    }
+
     public void DecrementBranchCount(int howMuch)
     {
-        branchCount--;
+        branchCount -= howMuch;
     }
 
     public string GetClassName()

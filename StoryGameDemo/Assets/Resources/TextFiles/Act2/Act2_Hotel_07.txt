@@ -6,11 +6,11 @@
   "dialogues": [
 	{
 	  "sentence": "Video: Ricky Rage Thompson Left",	  
-	  "currentBranchNum": 6,
-	  "targetBranchNum": 9,
+	  "currentBranchNum": 5,
+	  "targetBranchNum": 8,
 	  "possibleAnswersNum": 2,
 	  "bIsVideo" : true,
-	  "videoPath" : "Videos/Test/TestA"
+	  "videoPath" : "Videos/Test/Act_02/YourMum"
 	}
   ]
 }
