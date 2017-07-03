@@ -6,6 +6,7 @@
   "dialogues": [
 	{
 	  "sentence": "Video: Ricky Rage Thompson Left Deal",	  
+	  "currentBranchNum": 14,
 	  "targetBranchNum": 16,
 	  "possibleAnswersNum": 1,
 	  "bIsVideo" : true,

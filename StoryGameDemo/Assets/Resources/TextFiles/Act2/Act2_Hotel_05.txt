@@ -6,6 +6,7 @@
   "dialogues": [
 	{
 	  "sentence": "You stuff your face like it's your last meal, until your hand is taken from you... it feels like it's gripped in a vice. It takes you a moment to realise it's in another hand... you never get chance to look who it belongs to. You're dragged out of the room.",	  
+	  "currentBranchNum": 4,
 	  "targetBranchNum": 5,
 	  "possibleAnswersNum": 1,
 	  "bIsVideo" : false,

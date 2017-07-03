@@ -5,13 +5,15 @@
   "dialogues": [
     {
       "sentence": "Hello World",
+	  "currentBranchNum": 0,
 	  "targetBranchNum": 0,
 	  "possibleAnswersNum": 0,
 	  "bIsVideo" : false,
 	  "videoPath" : ""
     },
 	{
-	  "sentence": "This is a test",	  
+	  "sentence": "This is a test",	 
+	  "currentBranchNum": 0,
 	  "targetBranchNum": 0,
 	  "possibleAnswersNum": 0,
 	  "bIsVideo" : false,

@@ -28,7 +28,7 @@ public class VideoTest : MonoBehaviour
     private VideoClip videoClip;
 
 
-    public MovieTexture movie;
+    //public MovieTexture movie;
 
     void Start()
     {

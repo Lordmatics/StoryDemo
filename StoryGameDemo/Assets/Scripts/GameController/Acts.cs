@@ -14,84 +14,55 @@ public class NarrativeData
 public class Branch
 {
     public int branchIndex;
-    public int maxBranches;
+    public int numOfAnswers;
     public List<NarrativeData> narrativeData;
 }
 
-public abstract class Act
+[System.Serializable]
+public class ActEvent
 {
-    protected int branchCount;
+    public List<Branch> branchInfo;
+}
+
+[System.Serializable]
+public class Act
+{
+    private int branchCount;
+    private string name;
 
     [SerializeField]
-    protected List<Branch> branches = new List<Branch>();
+    private ActEvent branches;
 
-    public abstract int GetBranchCount();
+    public Act(string name)
+    {
+        this.name = name;
+        branches = TextFactory.TextAssembly.RunTextFactory<ActEvent>("Test/" + name);
+        //Debug.Log("Branches Assigned");
+    }
 
-    public abstract void IncrementBranchCount();
-
-    public abstract void DecrementBranchCount(int howMuch);
-
-    public abstract string GetClassName();
-
-    public abstract List<Branch> GetBranches();
-}
-
-[System.Serializable]
-public class Act_01 : Act
-{
-    public override int GetBranchCount()
+    public int GetBranchCount()
     {
         return branchCount;
     }
 
-    public override void IncrementBranchCount()
+    public void IncrementBranchCount()
     {
         branchCount++;
     }
 
-    public override void DecrementBranchCount(int howMuch)
+    public void DecrementBranchCount(int howMuch)
     {
-        branchCount -= howMuch;
+        branchCount--;
     }
 
-    public override string GetClassName()
+    public string GetClassName()
     {
-        return "Act_01";
+        return name;
     }
 
-    public override List<Branch> GetBranches()
+    public List<Branch> GetBranches()
     {
-        return branches;
-    }
-}
-
-[System.Serializable]
-public class Act_02 : Act
-{
-
-    public override int GetBranchCount()
-    {
-        return branchCount;
-    }
-
-    public override void IncrementBranchCount()
-    {
-        branchCount++;
-    }
-
-    public override void DecrementBranchCount(int howMuch)
-    {
-        branchCount -= howMuch;
-    }
-
-    public override string GetClassName()
-    {
-        return "Act_02";
-    }
-
-    public override List<Branch> GetBranches()
-    {
-        return branches;
+        return branches.branchInfo;
     }
 }
 
@@ -103,9 +74,11 @@ public class Acts : MonoBehaviour
     [SerializeField]
     private bool bShouldPersist = false;
 
-    public Act_01 act_01;
+    //public Act_01 act_01;
 
-    public Act_02 act_02;
+    //public Act_02 act_02;
+
+    //public List<Act> allActs = new List<Act>();
 
     public List<Act> allActs = new List<Act>();
 
@@ -129,9 +102,12 @@ public class Acts : MonoBehaviour
 
     private void Start()
     {
+        Act act_01 = new Act("Act_01");
+        Act act_02 = new Act("Act_02");
         allActs.Add(act_01);
         allActs.Add(act_02);
     }
+
     public Act GetCurrentAct()
     {
         return allActs[currentAct - 1];

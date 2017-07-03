@@ -52,6 +52,7 @@ public class Game : MonoBehaviour
 
     private void Awake()
     {
+
         rpgText = GameObject.Find("RPG_Message").GetComponent<Text>();
         boxToDuplicate = GameObject.Find("TextBGPanel");
         parentForScroll = GameObject.Find("ScrollZone").GetComponent<RectTransform>();
@@ -77,13 +78,14 @@ public class Game : MonoBehaviour
     #endregion
     void DebugHelper()
     {
+        
         Act currentAct = Acts.instance.GetCurrentAct();
         Branch currentBranch = currentAct.GetBranches()[currentAct.GetBranchCount()];
 
         curActText.text = "Act Name: " + currentAct.GetClassName();
         curBranchNum.text = "Branch Count: " + currentAct.GetBranchCount().ToString();
         curBranchIndex.text = "Branch Index: " + currentBranch.branchIndex;
-        curBranchTotal.text = "Branch Total: " + currentBranch.maxBranches;
+        curBranchTotal.text = "Branch Total: " + currentBranch.numOfAnswers;
         curData.text = "NarrativeData: " + currentBranch.narrativeData.Count;
         target.text = "Target Branch: " + targetBranchNumber;
         eventTargetText.text = "EV_Target: " + eventTarget;
@@ -92,6 +94,11 @@ public class Game : MonoBehaviour
     private void Update()
     {
         DebugHelper();
+        ScrollChat();
+    }
+
+    void ScrollChat()
+    {
         if (previousMessages.Count <= 0) return;
         if (Input.GetKey(KeyCode.DownArrow))
         {
@@ -180,10 +187,11 @@ public class Game : MonoBehaviour
         Act currentAct = Acts.instance.GetCurrentAct();
         // Get Number of Branches
         int prevBranchIndex = currentAct.GetBranchCount();
+        
         // Get the data at that branch
         Branch previousBranch = currentAct.GetBranches()[prevBranchIndex];
         // Get the max options for this branch
-        int numOfAnswers = previousBranch.maxBranches;
+        int numOfAnswers = previousBranch.numOfAnswers;
         // Based on the index of the answer button
         // Select the right narrative to branch to
 
@@ -199,12 +207,15 @@ public class Game : MonoBehaviour
         // Need a way to track the branching - Above might do it
         currentEvent = TextFactory.TextAssembly.RunTextFactoryForFile(filePath);
 
-        if(currentEvent.dialogues[currentStepIndex].bIsVideo)
-        {
-            ProceedThroughDialogueEvent();
-        }
         // Enable clicking
         SetCanProceed(true);
+
+        if (currentEvent.dialogues[currentStepIndex].bIsVideo)
+        {
+            ProceedThroughDialogueEvent();
+            ProceedThroughDialogueEvent();
+        }
+
 
         // Load next dialogue
         ProceedThroughDialogueEvent();
@@ -217,7 +228,6 @@ public class Game : MonoBehaviour
     {
         //VideoCallback += ProceedThroughDialogueEvent;
         VideoCallback += CreateAnswers;
-
     }
 
     private void OnDisable()
@@ -242,7 +252,6 @@ public class Game : MonoBehaviour
             // Extract button data from current branch config
             if (i >= currentBranch.narrativeData.Count)
             {
-
                 Debug.Log("No More Narrative Data At Branch: " + curBranch);
                 return;
             }
@@ -276,8 +285,10 @@ public class Game : MonoBehaviour
             if(bVidNotButton)
             {
                 //BranchNarrative(0);
+                Debug.Log("Video Should Start");
                 string vidPath = currentEvent.dialogues[currentStepIndex - 1].videoPath;
                 StartCoroutine(AssignCurrentRenderTexture.instance.PlayVideoAt(vidPath, VideoCallback, false));
+                
             }
             else
             {
@@ -304,17 +315,42 @@ public class Game : MonoBehaviour
         rpgText.text = currentEvent.dialogues[currentStepIndex].sentence;
         eventTarget = currentEvent.dialogues[currentStepIndex].targetBranchNum;
 
+        // THIS DOESNT WORK QUITE AS I THOUGHT
+        // NEED TO MAKE NEW TARGET FOR BRANCH, AND TARGET OF THAT TARGET BRANCH
+
+        // B7T13 == CBN ET
+
+ 
+
+
         // Okay... this is to make sure, you return to the main branch
         // Assuming a tangent was undergone
+        int curBranchID = currentEvent.dialogues[currentStepIndex].currentBranchNum;
         int difference = eventTarget - targetBranchNumber;
+        //Debug.Log("Diff: " + difference);
+        //Debug.Log("ET: " + eventTarget);
+        //Debug.Log("TBN: " + targetBranchNumber);
+        //Debug.Log("CBN: " + currentEvent.dialogues[currentStepIndex].currentBranchNum);
         if (difference > 0)
         {
             targetBranchNumber += difference;
             for (int i = 0; i < difference; i++)
             {
+                //Debug.Log("Branch Count" + currentAct.GetBranchCount());
                 currentAct.IncrementBranchCount();
             }
+            //Debug.Log("END Branch Count" + currentAct.GetBranchCount());
+
         }
+
+        //int prevBranchNum = eventTarget - targetBranchNumber;
+        //int loops = curBranchID - prevBranchNum;
+        ////targetBranchNumber += loops;
+        //for (int i = 0; i < loops; i++)
+        //{
+        //    currentAct.IncrementBranchCount();
+        //}
+
         bCanProceed = false;
         IncrementStepIndex();
     }

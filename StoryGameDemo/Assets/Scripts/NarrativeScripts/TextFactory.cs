@@ -31,7 +31,21 @@ namespace TextFactory
             return dialogue;
         }
 
+        public static ActEvent RunTextFactoryForAct(string filePath)
+        {
+            TextAsset file = Resources.Load("TextFiles/" + filePath) as TextAsset;
+            string content = file.ToString();
+            ActEvent dialogue = JsonMapper.ToObject<ActEvent>(content);
+            return dialogue;
+        }
 
+        public static T RunTextFactory<T>(string filePath)
+        {
+            TextAsset file = Resources.Load("TextFiles/" + filePath) as TextAsset;
+            string content = file.ToString();
+            T dialogue = JsonMapper.ToObject<T>(content);
+            return dialogue;
+        }
         // Below doesnt work in builds, since unity doesnt support json extensions at build time
         // Instead going to use Json Schema, but in .txt format
 

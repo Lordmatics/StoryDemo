@@ -6,6 +6,7 @@
   "dialogues": [
     {
       "sentence": "It looks like the hotel restaurant is open for breakfast!! You should check out the menu.",
+	  "currentBranchNum": 0,
 	  "targetBranchNum": 1,
 	  "possibleAnswersNum": 1,
 	  "bIsVideo" : false,

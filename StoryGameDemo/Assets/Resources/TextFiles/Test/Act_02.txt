@@ -1,0 +1,235 @@
+// https://jsonformatter.curiousconcept.com/ // JSON checker for syntax
+// https://www.codeandweb.com/blog/2014/03/28/using-spritesheets-with-unity // texture packer pro
+
+{
+  "branchInfo": 
+  [
+    {
+      "branchIndex": 0,
+	  "numOfAnswers": 1,
+	  "narrativeData": 
+	  [
+		{
+			"filePath": "Act2/Act2_Hotel_02",
+			"answerData": "Check out the menu"
+		}
+	  ]
+    },
+	{
+	  "branchIndex": 1,	 
+	  "numOfAnswers": 2,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_03",
+			"answerData": "Subtly stroll over there"
+		  },
+		  {
+		  	"filePath": "Act2/Act2_Hotel_04",
+			"answerData": "Do it quick and painless"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 2,	 
+	  "numOfAnswers": 1,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_04",
+			"answerData": "Get some food and go!"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 3,	 
+	  "numOfAnswers": 5,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_06",
+			"answerData": "Cereal"
+		  },
+		  {
+			"filePath": "Act2/Act2_Hotel_06",
+			"answerData": "Toast"
+		  },
+		  {
+			"filePath": "Act2/Act2_Hotel_06",
+			"answerData": "Danish"
+		  },
+		  {
+			"filePath": "Act2/Act2_Hotel_06",
+			"answerData": "Croissant"
+		  },
+		  {
+			"filePath": "Act2/Act2_Hotel_06",
+			"answerData": "Fruit"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 4,	 
+	  "numOfAnswers": 0,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "",
+			"answerData": "Removed"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 5,	 
+	  "numOfAnswers": 3,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_07",
+			"answerData": "Your mum"
+		  },
+		  {
+		  	"filePath": "Act2/Act2_Hotel_08",
+			"answerData": "I needed food... That's all"
+		  },
+		  {
+		  	"filePath": "Act2/Act2_Hotel_09",
+			"answerData": "Start crying"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 6,	 
+	  "numOfAnswers": 2,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_10",
+			"answerData": "Hope you got a warranty"
+		  },
+		  {
+		  	"filePath": "Act2/Act2_Hotel_11",
+			"answerData": "I'm sorry"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 7,	 
+	  "numOfAnswers": 2,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_12",
+			"answerData": "Deal"
+		  },
+		  {
+		  	"filePath": "Act2/Act2_Hotel_13",
+			"answerData": "My kid brother punches harder"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 8,	 
+	  "numOfAnswers": 1,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_14",
+			"answerData": "Ok ok ok"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 9,	 
+	  "numOfAnswers": 0,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "",
+			"answerData": "GAMEOVER"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 10,	 
+	  "numOfAnswers": 1,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_12",
+			"answerData": "Deal"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 11,	 
+	  "numOfAnswers": 0,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "",
+			"answerData": "GAMEOVER"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 12,	 
+	  "numOfAnswers": 1,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_12",
+			"answerData": "Deal"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 13,	 
+	  "numOfAnswers": 2,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_15",
+			"answerData": "I really just wanna get the bus"
+		  },
+		  {
+		  	"filePath": "Act2/Act2_Hotel_16",
+			"answerData": "What's in the bag"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 14,	 
+	  "numOfAnswers": 1,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_17",
+			"answerData": "Fine"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 15,	 
+	  "numOfAnswers": 1,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "Act2/Act2_Hotel_17",
+			"answerData": "Fine"
+		  }
+	  ]
+	},
+	{
+	  "branchIndex": 16,	 
+	  "numOfAnswers": 0,
+	  "narrativeData": 
+	  [
+		  {
+			"filePath": "",
+			"answerData": "End of Act 02"
+		  }
+	  ]
+	}
+  ]
+}

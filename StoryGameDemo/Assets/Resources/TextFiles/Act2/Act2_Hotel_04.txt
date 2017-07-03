@@ -6,6 +6,7 @@
   "dialogues": [
 	{
 	  "sentence": "You make a dash for the buffet. You're loud... but your stomach is louder... almost there... almost.... there! What do you want to take??",	  
+	  "currentBranchNum": 3,
 	  "targetBranchNum": 4,
 	  "possibleAnswersNum": 5,
 	  "bIsVideo" : false,

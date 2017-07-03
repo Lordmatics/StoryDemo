@@ -19,6 +19,12 @@ public class ChangeSceneEditor : Editor
         OpenScene("Main");
     }
 
+    [MenuItem("OpenScene/TestRealm")]
+    public static void OpenTestRealm()
+    {
+        OpenScene("TestRealm");
+    }
+
     static void OpenScene(string name)
     {
         if(EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())

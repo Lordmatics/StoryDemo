@@ -5,14 +5,16 @@
 {
   "dialogues": [
 	{
-	  "sentence": "Menu added to inventory",	 
+	  "sentence": "Menu added to inventory",	
+	  "currentBranchNum": 1,
 	  "targetBranchNum": 2,
 	  "possibleAnswersNum": 0,
 	  "bIsVideo" : false,
 	  "videoPath" : ""
 	},
 	{
-	  "sentence": "Woah! These prices are ridiculous! What is this, a hotel for millionaires?",	  
+	  "sentence": "Woah! These prices are ridiculous! What is this, a hotel for millionaires?",	 
+	  "currentBranchNum": 1,
 	  "targetBranchNum": 2,
 	  "possibleAnswersNum": 0,
 	  "bIsVideo" : false,
@@ -20,6 +22,7 @@
 	},
 	{
 	  "sentence": "There's an open buffet table across the room... you need to grab some food here - you can barely stand.",
+	  "currentBranchNum": 1,
 	  "targetBranchNum": 2,
 	  "possibleAnswersNum": 2,
 	  "bIsVideo" : false,

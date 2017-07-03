@@ -6,6 +6,7 @@
   "dialogues": [
 	{
 	  "sentence": "Video: Ricky Rage Thompson  Main Branch",	  
+	  "currentBranchNum": 13,
 	  "targetBranchNum": 14,
 	  "possibleAnswersNum": 2,
 	  "bIsVideo" : true,
