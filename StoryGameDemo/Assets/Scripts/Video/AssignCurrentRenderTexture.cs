@@ -101,6 +101,9 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
         StartCoroutine(OnVideoFinished(Callback, bAutoClose));
         audioSource.Play();
         RenderTexture texture = (RenderTexture)Resources.Load("Videos/Test/VideoRT");
+        //UnityEngine.RenderTexture.active = texture;
+        //GL.Clear(true, true, Color.clear);
+        //RenderTexture.active = rt;
         SetRenderTexture(texture);
         SetAlpha(1.0f);
         yield break;
@@ -133,7 +136,15 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
 
     public void SetRenderTexture(RenderTexture texture)
     {
+        // Warning - > Edit -> Graphics Emulation -> No Emulation isntead of OpenGL3
+        //Camera camera = Camera.main;
+        //int width = camera.pixelWidth;
+        //int height = camera.pixelHeight;
+        //RenderTexture rt = new RenderTexture(width, height, 32);
+        //videoPlayer.renderMode = VideoRenderMode.RenderTexture;
+        //videoPlayer.targetTexture = texture;
         image.texture = texture;
+        //texture.DiscardContents();
     }
 
     public void SetAlpha(float alpha)
