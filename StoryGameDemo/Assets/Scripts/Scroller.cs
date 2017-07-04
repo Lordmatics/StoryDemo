@@ -11,6 +11,7 @@ public class Scroller : MonoBehaviour
     [SerializeField]
     private float lerpSpeed = 5.0f;
 
+    public bool bScrolling = false;
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
@@ -33,10 +34,13 @@ public class Scroller : MonoBehaviour
 
     public IEnumerator InitiateScroll()
     {
+        Debug.Log("Scrolling " + gameObject.name);
         float targetMinY = rect.anchorMin.y + 0.35f;
         float targetMaxY = rect.anchorMax.y + 0.35f;
         while (rect.anchorMin.y < targetMinY && rect.anchorMax.y < targetMaxY)
         {
+            bScrolling = true;
+
             float newMinY = rect.anchorMin.y;
             newMinY = Mathf.Lerp(rect.anchorMin.y, targetMinY + 0.05f, lerpSpeed * Time.deltaTime);
             //newMinY = Mathf.Clamp(rect.anchorMin.y, 0.0f, targetMinY);
@@ -61,5 +65,9 @@ public class Scroller : MonoBehaviour
     void SetCanProceed()
     {
         Game.bCanProceed = true;
+        if (Game.OnProceedChanged != null)
+            Game.OnProceedChanged(Game.bCanProceed);
+        bScrolling = false;
+
     }
 }

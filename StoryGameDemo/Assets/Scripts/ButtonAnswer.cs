@@ -14,12 +14,21 @@ public class ButtonAnswer : MonoBehaviour , IPointerDownHandler
     [SerializeField]
     private Game script;
 
+    bool bPressed = false;
+
     private void Start()
     {
         script = FindObjectOfType<Game>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
+    {
+        if (bPressed) return;
+        bPressed = true;
+        Invoke("Activate", 0.25f);
+    }
+
+    void Activate()
     {
         // Branch narrative based off of the option index
         script.BranchNarrative(optionIndex);

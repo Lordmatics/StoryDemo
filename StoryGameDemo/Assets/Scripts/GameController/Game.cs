@@ -239,7 +239,7 @@ public class Game : MonoBehaviour
             //Debug.Log("bCanProceed == false");
             return;
         }
-        Debug.Log("-----------------CurrentStepIndex:" + currentStepIndex.ToString() + " Count: " + currentEvent.dialogues.Count.ToString());
+        Debug.Log("-----------------CurrentStepIndex:" + currentStepIndex + " Count: " + currentEvent.dialogues.Count);
         if (currentStepIndex >= currentEvent.dialogues.Count)
         {
             // Need a constraint here, if there are no more narrative entries for this act
@@ -278,6 +278,7 @@ public class Game : MonoBehaviour
 
     void ScrollUp()
     {
+        SetCanProceed(false);
         // Duplicate contents.
         GameObject message = (GameObject)Instantiate(boxToDuplicate);
         // Make sure only the original text box can proceed the dialogue
@@ -303,7 +304,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    void SetCanProceed(bool canProceed)
+    public void SetCanProceed(bool canProceed)
     {
         bCanProceed = canProceed;
         if (OnProceedChanged != null)
