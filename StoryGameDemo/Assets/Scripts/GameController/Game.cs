@@ -32,12 +32,6 @@ public class Game : MonoBehaviour
     [SerializeField]
     private List<GameObject> buttonList = new List<GameObject>();
 
-    [SerializeField]
-    private float lerpSpeed = 5.0f;
-
-    [SerializeField]
-    private float scrollSpeed = 5.0f;
-
     /** See Scroller script*/
     public static Action OnScrollFinished;
 
@@ -51,6 +45,7 @@ public class Game : MonoBehaviour
         boxToDuplicate = GameObject.Find("TextBGPanel");
         parentForScroll = GameObject.Find("ScrollZone").GetComponent<RectTransform>();
         parentForAnswers = GameObject.Find("AnswerButtonParent").GetComponent<RectTransform>();
+        SetCanProceed(true);
     }
 
     private void Start()
@@ -58,6 +53,7 @@ public class Game : MonoBehaviour
         currentEvent = TextFactory.TextAssembly.RunTextFactory<DialogueEvent>(FileContainer.ActTwo_01);
         rpgText.text = currentEvent.dialogues[currentStepIndex++].sentence;
         Debug.Log("Count" + currentEvent.dialogues.Count + " stepindex " + currentStepIndex);
+        SetCanProceed(true);
     }
 
     #region DEBUG
@@ -82,59 +78,171 @@ public class Game : MonoBehaviour
 
     private void Update()
     {
-        DebugHelper();
         ScrollChat();
+    }
+
+    private Vector2 startPos;
+    public float minSwipeDist = 150.0f;
+    public float swipeSpeed = 5.0f;
+    void SwipeScroll()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.touches[0];
+            float time = 0.0f;
+            float swipeDirection = 0.0f;
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    startPos = touch.position;
+                    time = Time.time;
+                    break;
+                case TouchPhase.Moved:
+                    float swipeDistVertical = (new Vector3(touch.position.y, 0.0f, 0.0f) - new Vector3(startPos.y, 0.0f, 0.0f)).magnitude;
+                    if (swipeDistVertical > minSwipeDist)
+                    {
+                        swipeDirection = Mathf.Sign(touch.position.y - startPos.y);
+                        if (swipeDirection > 0)
+                        {
+                            // Up Swipe
+                            ChatUp(swipeSpeed);
+                        }
+                        else
+                        {
+                            // Down Swipe
+                            ChatDown(swipeSpeed);
+                        }
+                    // Recalculate start pos - so if u do a reverse swipe it will recognise it
+                    //startPos = touch.position;
+
+                    }
+                    break;
+                case TouchPhase.Stationary:
+                    startPos = touch.position;
+                    time = Time.time;
+                    break;
+                case TouchPhase.Ended:
+
+                    //float endTime = Time.time - time;
+                    //endTime = Mathf.Clamp((int)endTime, 0, 5);
+                    //if (swipeDirection > 0)
+                    //{
+                    //    // Up Swipe - Momentum swipe
+                    //    for (int i = 0; i < endTime * 60; i++)
+                    //    {
+                    //        ChatUp(2.0f);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    // Down Swipe
+                    //    for (int i = 0; i < endTime * 60; i++)
+                    //    {
+                    //        ChatDown(2.0f);
+                    //    }
+                    //}
+
+                    //float swipeDistVertical = (new Vector3(touch.position.y, 0.0f, 0.0f) - new Vector3(startPos.y, 0.0f, 0.0f)).magnitude;
+                    //if (swipeDistVertical > minSwipeDist)
+                    //{
+                    //    float swipeValue = Mathf.Sign(touch.position.y - startPos.y);
+                    //    float endTime = Time.time - time;
+                    //    if (swipeValue > 0)
+                    //    {
+                    //        // Up Swipe
+                    //        StartCoroutine(ChatUp(endTime * 3.0f));
+                    //    }
+                    //    else
+                    //    {
+                    //        // Down Swipe
+                    //        StartCoroutine(ChatDown(endTime * 3.0f));
+                    //    }
+                    //}
+                    break;
+            }
+        }
+    }
+
+    void ChatUp(float DeltaTime = 1.0f)
+    {
+        Vector2 leftBot = parentForScroll.offsetMin;
+        Vector2 rightTop = parentForScroll.offsetMax;
+
+        //for (int i = 0; i < (int)DeltaTime; i++)
+        //{
+        leftBot.y += 400.0f * Time.deltaTime * DeltaTime;
+        rightTop.y += 400.0f * Time.deltaTime * DeltaTime;
+            //yield return new WaitForEndOfFrame();
+        //}
+
+        
+
+
+
+        if (previousMessages.Count < 3)
+        {
+            leftBot.y = Mathf.Clamp(leftBot.y, 0.0f, 0.0f);
+            rightTop.y = Mathf.Clamp(rightTop.y, 0.0f, 0.0f);
+        }
+        else
+        {
+            leftBot.y = Mathf.Clamp(leftBot.y, leftBot.y, 0.0f);
+            rightTop.y = Mathf.Clamp(rightTop.y, rightTop.y, 0.0f);
+        }
+        parentForScroll.offsetMin = leftBot;
+        parentForScroll.offsetMax = rightTop;
+    }
+
+    void ChatDown(float DeltaTime = 1.0f)
+    {
+        Vector2 leftBot = parentForScroll.offsetMin;
+        Vector2 rightTop = parentForScroll.offsetMax;
+
+        // for (int i = 0; i < (int)DeltaTime; i++)
+        // {
+        leftBot.y -= 400.0f * Time.deltaTime * DeltaTime;
+        rightTop.y -= 400.0f * Time.deltaTime * DeltaTime;
+            //yield return new WaitForEndOfFrame();
+       // }
+
+        
+
+        Debug.Log(leftBot.y + ": LeftbotY" + " And " + rightTop.y + " : RightTopY");
+
+        if (previousMessages.Count < 3)
+        {
+            leftBot.y = Mathf.Clamp(leftBot.y, 0.0f, 620.0f);
+            rightTop.y = Mathf.Clamp(rightTop.y, 0.0f, 270.0f);
+        }
+        else
+        {
+            // This algorthm took forever to calculate xD
+            leftBot.y = Mathf.Clamp(leftBot.y, -1 * (((previousMessages.Count - 2) * 330.0f) - 270.0f), 0.0f);
+            rightTop.y = Mathf.Clamp(rightTop.y, -1 * (((previousMessages.Count - 2) * 330.0f) - 270.0f), 0.0f);
+        }
+
+        parentForScroll.offsetMin = leftBot;
+        parentForScroll.offsetMax = rightTop;
     }
 
     void ScrollChat()
     {
         if (previousMessages.Count <= 0) return;
+#if UNITY_ANDROID
+        SwipeScroll();
+#else
         if (Input.GetKey(KeyCode.DownArrow))
         {
             // Move Scroll down
             //parentForScroll.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top)
-            Vector2 leftBot = parentForScroll.offsetMin;
-            Vector2 rightTop = parentForScroll.offsetMax;
-            leftBot.y -= 400.0f * Time.deltaTime;
-            rightTop.y -= 400.0f * Time.deltaTime;
-            Debug.Log(leftBot.y + ": LeftbotY" + " And " + rightTop.y + " : RightTopY");
-
-            if (previousMessages.Count < 3)
-            {
-                leftBot.y = Mathf.Clamp(leftBot.y, 0.0f, 620.0f);
-                rightTop.y = Mathf.Clamp(rightTop.y, 0.0f, 270.0f);
-            }
-            else
-            {
-                // This algorthm took forever to calculate xD
-                leftBot.y = Mathf.Clamp(leftBot.y, -1 * (((previousMessages.Count - 2) * 330.0f) - 270.0f), 0.0f);
-                rightTop.y = Mathf.Clamp(rightTop.y, -1 * (((previousMessages.Count - 2) * 330.0f) - 270.0f), 0.0f);
-            }
-
-            parentForScroll.offsetMin = leftBot;
-            parentForScroll.offsetMax = rightTop;
+            ChatDown();
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            Vector2 leftBot = parentForScroll.offsetMin;
-            Vector2 rightTop = parentForScroll.offsetMax;
-            leftBot.y += 400.0f * Time.deltaTime;
-            rightTop.y += 400.0f * Time.deltaTime;
-
-
-            if (previousMessages.Count < 3)
-            {
-                leftBot.y = Mathf.Clamp(leftBot.y, 0.0f, 0.0f);
-                rightTop.y = Mathf.Clamp(rightTop.y, 0.0f, 0.0f);
-            }
-            else
-            {
-                leftBot.y = Mathf.Clamp(leftBot.y, leftBot.y, 0.0f);
-                rightTop.y = Mathf.Clamp(rightTop.y, rightTop.y, 0.0f);
-            }
-            parentForScroll.offsetMin = leftBot;
-            parentForScroll.offsetMax = rightTop;
+            ChatUp();
         }
+#endif
+
     }
 
     #region OnTextPressed
@@ -146,7 +254,7 @@ public class Game : MonoBehaviour
             SetCanProceed(false);
         }
     }
-    #endregion
+#endregion
 
     void SpawnAnswerButton(int index, string buttonText)
     {

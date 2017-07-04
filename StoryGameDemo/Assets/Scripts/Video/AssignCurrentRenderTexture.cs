@@ -55,6 +55,7 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
 
     void Start ()
     {
+        Application.runInBackground = true;
         image = GetComponent<RawImage>();
         audioSource = GetComponent<AudioSource>();
         videoPlayer = GetComponent<VideoPlayer>();
@@ -83,10 +84,11 @@ public class AssignCurrentRenderTexture : MonoBehaviour, IPointerDownHandler
     {
         if(bAutoClose)
             Callback += OnVideoEnd;
+
         //"Videos/Test/Video"
         videoPlayer.Prepare();
 
-        WaitForSeconds waitTime = new WaitForSeconds(1);
+        WaitForSeconds waitTime = new WaitForSeconds(2); // Might need to make this 5. Video can get stuck bufferring
         while (!videoPlayer.isPrepared)
         {
             Debug.Log("Preparing Video");
