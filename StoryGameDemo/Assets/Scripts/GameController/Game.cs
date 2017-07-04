@@ -217,7 +217,6 @@ public class Game : MonoBehaviour
 
     void CreateAnswers()
     {
-        // Prevent this from being repeated maybe? - BUG SPAMMING CLICK SPAWNS LOTS OF BUTTONS
         List<NarrativeData> currBranchData = GetBranch().narrativeData;
         for (int i = 0; i < currentEvent.dialogues[currentStepIndex - 1].possibleAnswersNum; i++)
         {
@@ -247,7 +246,9 @@ public class Game : MonoBehaviour
             if (bVidNotButton)
             {
                 string vidPath = currentEvent.dialogues[currentStepIndex - 1].videoPath;
-                StartCoroutine(AssignCurrentRenderTexture.instance.PlayVideoAt(vidPath, VideoCallback, false));            
+                int check = currentEvent.dialogues[currentStepIndex - 1].targetBranchNum;
+                bool bAutoClose = check == -1;
+                StartCoroutine(AssignCurrentRenderTexture.instance.PlayVideoAt(vidPath, VideoCallback, bAutoClose));            
             }
             else
             {

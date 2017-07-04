@@ -10,8 +10,8 @@
 	  "currentBranchNum": 8,
 	  "targetBranchNum": -1,
 	  "possibleAnswersNum": 0,
-	  "bIsVideo" : false,
-	  "videoPath" : ""
+	  "bIsVideo" : true,
+	  "videoPath" : "Videos/Test/Act_02/GotWarranty"
 	}
   ]
 }
